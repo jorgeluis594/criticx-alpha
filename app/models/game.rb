@@ -8,5 +8,10 @@ class Game < ApplicationRecord
   belongs_to :parent, class_name: "Game", optional: true
   has_many :reviews, as: :reviewable
 
-  enum category: [:main_game,:expansion]
+  enum category: {main_game: 0, expansion: 1}
+  validates :name, :category, presence: true
+  validates :name, uniqueness: true
+  validates :rating, numericality: {only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100}
+
+  validates_with ParentGameValidator
 end
